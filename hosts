@@ -1,0 +1,14 @@
+
+#212
+[SJC_R212_SRV1]
+
+#NXOS SWITCHES
+s-sjc-srv1dst1-4xxxx-1   ansible_host=x.x.x.x   ansible_network_os=nxos
+s-sjc-srv1dst1-4xxxx-2   ansible_host=x.x.x.x   ansible_network_os=nxos
+
+#ONYX SWITCHES
+s-sjc-srv1acc-4xxxx-1	 ansible_host=x.x.x.x  ansible_network_os=onyx
+s-sjc-srv1acc-4xxxx-2	 ansible_host=x.x.x.x  ansible_network_os=onyx
+
+#QNOS SWITCHES
+s-sjc-srv1acc-4xxxx-1	 ansible_host=x.x.x.x   ansible_network_os=qnos
