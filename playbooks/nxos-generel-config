@@ -1,0 +1,24 @@
+---
+- name: General Config for Nexus
+  hosts: SJC_R212_SRV1
+  gather_facts: no
+  connection: local
+  tasks:
+
+     - name: ENABLE FEATURES
+       nxos_feature:
+        feature: "{{item.feature }}"
+        provider: "{{ nxos_provider }}"
+        with_items: "{{ features }}"
+    
+    - name: ENABLE VPC_lacp_lldp_interfacevlan_dhcp
+      nxos_config:
+       lines: 
+        - feature vpc
+        - feature lacp
+        - feature lldp
+        - feature interface-vlan
+        - feature dhcp
+       provider: "{{ nxos_provider }}"
+
+    
