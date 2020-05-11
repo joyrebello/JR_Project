@@ -1,5 +1,5 @@
 ---
-- name: General Config for Nexus
+- name: Config for nxos
   hosts: SJC_R212_SRV1
   gather_facts: no
   connection: local
@@ -24,7 +24,8 @@
       nxos_config:
         lines:
             - ip name-server {{ item }}
-      with_items: "{{ dns_servers }}"
+      with_items: 
+        - "{{ dns_servers }}"
       tags:
         - dns
         
@@ -32,7 +33,8 @@
       nxos_config:
         lines:
             - ntp server {{ item }} use-vrf default
-      with_items: "{{ ntp_servers }}"
+      with_items: 
+        - "{{ ntp_servers }}"
       tags:
         - ntp
 
@@ -40,26 +42,71 @@
       nxos_config:
         lines:
             - logging server {{ item }} use-vrf default facility local4
-      with_items: "{{ syslog_servers }}"
+      with_items: 
+        - "{{ syslog_servers }}"
       tags:
         - syslog
 
     - name: Enable Features
       nxos_feature:
-              feature: "{{item.feature }}"
-      with_items: "{{ features }}"
+            feature: "{{item.feature }}"
+      with_items: 
+        - "{{ features }}"
       tags: 
         - features
 
     - name: Configure Vlans
       nxos_vlan:
-              vlan_id: "{{ item.id }}
-              name: "{{ item.description }}
-      with_items: "{{ vlans }}
+            vlan_id: "{{ item.id }}
+            name: "{{ item.description }}
+      with_items: 
+        - "{{ vlans }}
       tags:
         - vlans
 
-    
+# Interface Configurtion
+    - name:Ensure Port is L2 
+      nxos_interface:
+            interface: "{{ item.interface }}"
+            mode: layer2
+            admin_state: up
+      with_items: 
+        - "{{ l2_intfs }}"
+      tags:
+        - l2_interface
+
+    - name: Configure Trunk Port
+      nxos_config:
+        lines: 
+            - description {{ item.description }}
+            - switchport mode {{ item.mode }}
+            - switchport trunk allowed vlan {{ item.trunk_vlans }}
+            - spanning-tree port type edge trunk
+            - spanning-tree bpduguard enable
+            - storm-control broadcast level 10.00
+            - storm-control multicast level 10.00
+            - storm-control unicast level 10.00
+      with_items: 
+        - "{{ l2_intfs }}"
+      tags:
+        - trunk_port
+
+    - name: Configure Access Port
+      nxos_config:
+        lines: 
+            - description {{ item.description }}
+            - switchport mode {{ item.mode }}
+            - switchport access vlan {{ item.access_vlan }}
+            - spanning-tree port type edge
+            - spanning-tree bpduguard enable
+            - storm-control broadcast level 10.00
+            - storm-control multicast level 10.00
+            - storm-control unicast level 10.00
+      with_items: 
+        - "{{ l2_intfs }}"
+      tags:
+        - access_port
+
 
 
     
