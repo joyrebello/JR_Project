@@ -1,4 +1,30 @@
 ---
+
+  features: 
+    - { feature: vpc }
+    - { feature: lacp }
+    - { feature: lldp }
+    - { feature: interface-vlan }
+    - { feature: dhcp }  
+    - { feature: nxapi } 
+
+  dns_servers:
+    - { server: 10.1.253.53 }
+    - { server: 10.1.253.140 }
+    - { server: 10.1.253.141 }
+
+  ntp_servers:
+    - { server: ntp-1.net.rubrik.com }
+    - { server: ntp-2.net.rubrik.com }
+    - { server: ntp-3.net.rubrik.com }
+
+  syslog_servers:
+    - { server: 10.10.16.227 }
+
+  vlans:
+    - { id: 1, description: 'RUBRIK_INT_VLAN'}
+    - { id: 72, description: 'BRIK_IPMI'}
+   
   l2_intfs:
     - { interface: 'ethernet 1/1' ,description: 'sjc-c002', speed: '1G', switchport_mode: access, access_vlan: 633,trunk_allowed_vlans: none }
     - { interface: 'ethernet 1/2' ,description: , speed: ,switchport_mode: , access_vlan: ,trunk_allowed_vlans: none }
@@ -48,3 +74,22 @@
     - { interface: 'ethernet 1/46' ,description: , speed: ,switchport_mode: , access_vlan: ,trunk_allowed_vlans: none }
     - { interface: 'ethernet 1/47' ,description: , speed: ,switchport_mode: , access_vlan: ,trunk_allowed_vlans: none }
     - { interface: 'ethernet 1/48' ,description: , speed: ,switchport_mode: , access_vlan: ,trunk_allowed_vlans: none }
+    - { interface: 'ethernet 1/49' ,description: , speed: ,switchport_mode: , access_vlan: ,trunk_allowed_vlans: none }
+    - { interface: 'ethernet 1/50' ,description: , speed: ,switchport_mode: , access_vlan: ,trunk_allowed_vlans: none }
+    - { interface: 'ethernet 1/51' ,description: , speed: ,switchport_mode: , access_vlan: ,trunk_allowed_vlans: none }
+    - { interface: 'ethernet 1/52' ,description: , speed: ,switchport_mode: , access_vlan: ,trunk_allowed_vlans: none }
+    - { interface: 'ethernet 1/53' ,description: , speed: ,switchport_mode: , access_vlan: ,trunk_allowed_vlans: none }
+    - { interface: 'ethernet 1/54' ,description: , speed: ,switchport_mode: , access_vlan: ,trunk_allowed_vlans: none }
+    - { interface: 'ethernet 1/55' ,description: , speed: ,switchport_mode: , access_vlan: ,trunk_allowed_vlans: none }
+    - { interface: 'ethernet 1/56' ,description: , speed: ,switchport_mode: , access_vlan: ,trunk_allowed_vlans: none }
+    - { interface: 'ethernet 1/57' ,description: , speed: ,switchport_mode: , access_vlan: ,trunk_allowed_vlans: none }
+    - { interface: 'ethernet 1/58' ,description: , speed: ,switchport_mode: , access_vlan: ,trunk_allowed_vlans: none }
+    - { interface: 'ethernet 1/59' ,description: , speed: ,switchport_mode: , access_vlan: ,trunk_allowed_vlans: none }
+    - { interface: 'ethernet 1/60' ,description: , speed: ,switchport_mode: , access_vlan: ,trunk_allowed_vlans: none }
+    - { interface: 'ethernet 1/61' ,description: , speed: ,switchport_mode: , access_vlan: ,trunk_allowed_vlans: none }
+    - { interface: 'ethernet 1/62' ,description: , speed: ,switchport_mode: , access_vlan: ,trunk_allowed_vlans: none }
+    - { interface: 'ethernet 1/63' ,description: , speed: ,switchport_mode: , access_vlan: ,trunk_allowed_vlans: none }
+    - { interface: 'ethernet 1/64' ,description: , speed: ,switchport_mode: , access_vlan: ,trunk_allowed_vlans: none } 
+    
+
+ 

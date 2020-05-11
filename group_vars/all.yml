@@ -1,0 +1,20 @@
+---
+
+domain: net.rubrik.com
+snmp:
+  community: scale1234data
+  server:  10.1.9.254
+  contact: neteng@rubrik.com
+
+syslog_servers:
+     - 10.10.16.227
+     - 10.1.9.254
+dns_servers:
+     - 10.1.253.53
+     - 10.1.253.140
+     - 10.1.253.141
+
+ntp_servers:
+     - ntp-1.net.rubrik.com
+     - ntp-2.net.rubrik.com
+     - ntp-3.net.rubrik.com
