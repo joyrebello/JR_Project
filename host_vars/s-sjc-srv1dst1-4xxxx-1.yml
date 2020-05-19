@@ -1,12 +1,12 @@
 ---
 
   features: 
-    - { feature: vpc }
-    - { feature: lacp }
-    - { feature: lldp }
-    - { feature: interface-vlan }
-    - { feature: dhcp }  
-    - { feature: nxapi } 
+    - { feature: vpc, state: enabled }
+    - { feature: lacp, state: enabled }
+    - { feature: lldp, state: enabled }
+    - { feature: interface-vlan, state: enabled }
+    - { feature: dhcp, state: enabled }  
+    - { feature: nxapi, state: enabled } 
 
   dns_servers:
     - { server: 10.1.253.53 }
@@ -22,8 +22,9 @@
     - { server: 10.10.16.227 }
 
   vlans:
-    - { id: 1, description: 'RUBRIK_INT_VLAN'}
-    - { id: 72, description: 'BRIK_IPMI'}
+    - { id: VLAN_ID, description: 'DESCRIPTION', ipv4_addr: 'IP_ADDRESS',ipv6_addr: ,vrrp_id: NUMBER}
+    - { id: , description: , ipv4_addr: ,ipv6_addr: ,vrrp_id: }
+    - { id: 4, description: 'INFRA_NET', ipv4_addr: '10.2.4.0/24',ipv6_addr: ,vrrp_id: 4}
    
   l2_intfs:
     - { interface: 'ethernet 1/1' ,description: 'sjc-c002', speed: '1G', switchport_mode: access, access_vlan: 633,trunk_allowed_vlans: none }

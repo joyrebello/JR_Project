@@ -50,6 +50,7 @@
     - name: Enable Features
       nxos_feature:
             feature: "{{item.feature }}"
+            state: "{{item.state }}
       with_items: 
         - "{{ features }}"
       tags: 
@@ -58,53 +59,77 @@
     - name: Configure Vlans
       nxos_vlan:
             vlan_id: "{{ item.id }}
-            name: "{{ item.description }}
+            name:  "{{item.description}}_{{item.ipv4_addr | regex_replace('\\.','_') |regex_replace('/','_')}}"
       with_items: 
         - "{{ vlans }}
       tags:
         - vlans
 
 # Interface Configurtion
-    - name:Ensure Port is L2 
+    - name: Configure Interface as L2
       nxos_interface:
-            interface: "{{ item.interface }}"
-            mode: layer2
-            admin_state: up
-      with_items: 
-        - "{{ l2_intfs }}"
+        name: "{{item.interface}}"
+        description: "{{item.description}}"
+        mode: "{{item.mode}}"
+      with_items:
+            - "{{ l2_intfs }}"
       tags:
-        - l2_interface
-
-    - name: Configure Trunk Port
-      nxos_config:
-        lines: 
-            - description {{ item.description }}
-            - switchport mode {{ item.mode }}
-            - switchport trunk allowed vlan {{ item.trunk_vlans }}
-            - spanning-tree port type edge trunk
-            - spanning-tree bpduguard enable
-            - storm-control broadcast level 10.00
-            - storm-control multicast level 10.00
-            - storm-control unicast level 10.00
-      with_items: 
-        - "{{ l2_intfs }}"
-      tags:
-        - trunk_port
+        - l2-interface
 
     - name: Configure Access Port
-      nxos_config:
-        lines: 
-            - description {{ item.description }}
-            - switchport mode {{ item.mode }}
-            - switchport access vlan {{ item.access_vlan }}
-            - spanning-tree port type edge
-            - spanning-tree bpduguard enable
-            - storm-control broadcast level 10.00
-            - storm-control multicast level 10.00
-            - storm-control unicast level 10.00
-      with_items: 
-        - "{{ l2_intfs }}"
+      nxos_l2_interface:
+        name: "{{item.interface}}"
+        mode: "{{item.switchport_mode}}"
+        access_vlan: "{{item.access_vlan}}"
+
+      when: item.switchport_mode == "access"
+      with_items:
+            - "{{ l2_intfs }}"
       tags:
-        - access_port
+        - l2-access-port
+
+    - name: Configure Spanning-tree Interface Type For Access Port
+      nxos_config:
+        lines:
+          -  spanning-tree port type edge
+          -  spanning-tree bpduguard enable
+          -  storm-control broadcast level 10.00
+          -  storm-control multicast level 10.00
+          -  storm-control unicast level 10.00
+        parents:
+          - "interface {{ item.interface }}"
+      when: item.switchport_mode == "access"
+      with_items:
+            - "{{ l2_intfs }}"
+      tags:
+        - l2-spanning-tree-edge
+
+    - name: Configure Trunk Port
+      nxos_l2_interface:
+        name: "{{item.interface}}"
+        mode: "{{item.switchport_mode}}"
+        native_vlan: "{{item.native_vlan}}"
+      when: item.switchport_mode == "trunk"
+      with_items:
+            - "{{ l2_intfs }}"
+      tags: 
+        - l2-trunk-port
+
+    - name: Configure Spanning-tree Interface Type For Trunk Port
+      nxos_config:
+        lines:
+          -  spanning-tree port type edge trunk
+          -  spanning-tree bpduguard enable
+          -  storm-control broadcast level 10.00
+          -  storm-control multicast level 10.00
+          -  storm-control unicast level 10.00
+        parents:
+          - "interface {{ item.interface }}"
+      when: item.switchport_mode == "trunk"
+      with_items:
+            - "{{ l2_intfs }}"
+      tags: 
+        - l2-spanning-tree-edge-trunk
+
 
     

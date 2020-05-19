@@ -1,0 +1,44 @@
+{% if item.ipv4_addr | ipv4  %}
+ int vlan {{item.id}}
+ description {{item.description}}_{{item.ipv4_addr | regex_replace('\.','_') |regex_replace('\/','_')}}
+ no shutdown
+ !vrf member AWS10G
+ no ip redirects
+ no ipv6 redirects
+ {% if inventory_hostname == 'r-sjc-srv1agg-1' %}
+ ip address {{item.ipv4_addr | ipaddr('2') | ipaddr('host')  }}
+ {% if item.ipv6_addr != ''%}
+ ipv6 address {{item.ipv6_addr | ipaddr('2') | ipaddr('host')  }}
+ ipv6 nd managed-config-flag
+ {% endif %}
+ {% endif %}
+ {% if inventory_hostname == 'r-sjc-srv1agg-2' %}
+ ip address {{item.ipv4_addr | ipaddr('3') | ipaddr('host') }}
+ {% if item.ipv6_addr != ''%}
+ ipv6 address {{item.ipv6_addr | ipaddr('3') | ipaddr('host')  }}
+ ipv6 nd managed-config-flag
+ {% endif %}
+ {% endif %}
+ ip dhcp relay address 10.1.253.140
+ ip dhcp relay address 10.1.253.141
+ ipv6 dhcp relay address 2602:fda3:1:801::140
+ ipv6 dhcp relay address 2602:fda3:1:801::141
+ vrrp {{item.vrrp_id}} address-family ipv4
+ address {{item.ipv4_addr | ipaddr('1') | ipaddr('host') | ipaddr('address') }} primary
+ description {{item.description}}_{{item.ipv4_addr | regex_replace('\.','_') |regex_replace('\/','_')}}
+ {% if inventory_hostname == 'r-sjc-srv1agg-1' %}priority 150
+ preempt delay minimum 30
+ {% endif %}
+ {% if inventory_hostname == 'r-sjc-srv1agg-2' %}priority 100 {% endif %}
+
+ vrrpv2
+ no shut
+ vrrp {{item.vrrp_id}} address-family ipv6
+ address fe80:fda3:1:{{item.id}}::1 primary
+ address {{item.ipv6_addr | ipaddr('1') | ipaddr('host') | ipaddr('address') }}
+ description {{item.description}}_{{item.ipv4_addr | regex_replace('\.','_') |regex_replace('\/','_')}}
+ {% if inventory_hostname == 'r-sjc-srv1agg-1' %}priority 150
+ preempt delay minimum 30
+ {% endif %}
+ {% if inventory_hostname == 'r-sjc-srv1agg-2' %}priority 100 {% endif %}
+{% endif %}
